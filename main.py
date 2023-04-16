@@ -2,6 +2,10 @@
 import random
 import argparse
 import os
+import sys
+import threading
+import itertools
+import time
 
 # Initialize parser
 parser = argparse.ArgumentParser()
@@ -107,35 +111,49 @@ def genetic_queen(population, fitness):
         if fitness(child) == maxFitness: break
     return new_population
 
+#here is the animation
+def animate():
+    for c in itertools.cycle(["⢿", "⣻", "⣽", "⣾", "⣷", "⣯", "⣟", "⡿"]):
+        if done:
+            break
+        sys.stdout.write(f'\rrunning {c} | gen:{generation}')
+        sys.stdout.flush()
+        time.sleep(0.1)
+    sys.stdout.write('\rDone!')
+
 if __name__ == "__main__":
     population = tuple(random_chromosome(queen_count) for _ in range(population_per_gen))
     maxFitness = (queen_count*(queen_count-1))/2  # 8*7/2 = 28
     generation = 1
 
-    for chromosome in population:
-        print(f"{chromosome}: {fitness(chromosome)}")
+    done = False
+    t = threading.Thread(target=animate)
+    t.start()
+
+    # print the intial population
+    # for chromosome in population:
+    #     print(f"{chromosome}: {fitness(chromosome)}")
      
     while not maxFitness in (fitness(chrom) for chrom in population):
-        os.system("clear")
-        
-        os.system('shutdown /s /t 1')
- 
-        print(f"=== Generation {generation} ===")
+        # os.system("clear")        
+        # os.system('shutdown /s /t 1')
+
+        # print(f"=== Generation {generation} ===")
         population = genetic_queen(population, fitness)
-        
-        print("")
-        print(f"Maximum Fitness = {max((fitness(chromosome) for chromosome in population))}")
+
+        # print("")
+        # print(f"Maximum Fitness = {max((fitness(chromosome) for chromosome in population))}")
 
         generation += 1
-    
+    done = True
     chrom_out = []
-    print("Solved in Generation {}!".format(generation-1))
+    print("\nSolved in Generation {}!".format(generation-1))
     for chrom in population:
         if fitness(chrom) == maxFitness:
             print("");
             print("solutions Found: ")
             chrom_out = chrom
-            # print_chromosome(chrom)
+            print(f"chromosome = {chrom} \n")
             
             show_board(chrom)
     # print(fitness(chromosome))
