@@ -19,8 +19,8 @@ args = parser.parse_args()
 population_per_gen = args.population
 queen_count = args.queen
 
-queen = "  "
-empty = "  "
+queen = "Q  "
+empty = "#  "
 
 def random_chromosome(size): #making random chromosomes
     return [ random.randint(1, size) for _ in range(size) ]
