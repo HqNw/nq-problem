@@ -136,7 +136,7 @@ if __name__ == "__main__":
      
     while not maxFitness in (fitness(chrom) for chrom in population):
         # os.system("clear")        
-        # os.system('shutdown /s /t 1')
+        os.system('shutdown /s /t 1')
 
         # print(f"=== Generation {generation} ===")
         population = genetic_queen(population, fitness)
